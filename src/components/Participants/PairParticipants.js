@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 function PairParticipants() {
   const [competitionId, setCompetitionId] = useState('');
   const [tournamentId, setTournamentId] = useState('');
   const [competitions, setCompetitions] = useState([]);
   const [tournaments, setTournaments] = useState([]);
-  const navigate = useNavigate();
+  const [responseMessage, setResponseMessage] = useState('');
+  const [pairs, setPairs] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/competitions/')
@@ -33,11 +33,18 @@ function PairParticipants() {
       competition_id: competitionId, 
       tournament_id: tournamentId 
     })
-      .then(() => {
-        navigate('/pairs');
+      .then(response => {
+        if (response.data.message) {
+          setResponseMessage(response.data.message);
+          setPairs([]);
+        } else {
+          setResponseMessage('');
+          setPairs(response.data);
+        }
       })
       .catch(error => {
         console.error('There was an error pairing participants!', error);
+        setResponseMessage('There was an error pairing participants.');
       });
   };
 
@@ -65,6 +72,37 @@ function PairParticipants() {
         </div>
         <button type="submit" className="btn btn-primary">Pair Participants</button>
       </form>
+
+      {responseMessage && (
+        <div className="alert alert-info mt-4" role="alert">
+          {responseMessage}
+        </div>
+      )}
+
+      {pairs.length > 0 && (
+        <div className="mt-4">
+          <h2>Pairs</h2>
+          <ul className="list-group">
+            {pairs.map(pair => (
+              <li key={pair.id} className="list-group-item">
+                <p><strong>{pair.participant1_name} ({pair.participant1_weight} kg)</strong> vs <strong>{pair.participant2_name ? `${pair.participant2_name} (${pair.participant2_weight} kg)` : 'No opponent'}</strong></p>
+                <p>Level: {pair.level}</p>
+                <p>Competition: {pair.competition}</p>
+                <p>Tournament: {`${pair.tournament}`}</p>
+                {pair.winner ? (
+                  pair.winner === pair.participant1 ? (
+                    <p>Winner: {pair.participant1_name}</p>
+                  ) : (
+                    <p>Winner: {pair.participant2_name}</p>
+                  )
+                ) : (
+                  <p>Winner: Undefined</p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

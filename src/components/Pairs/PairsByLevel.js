@@ -27,11 +27,25 @@ function PairsByLevel() {
       });
   }, []);
 
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   axios.post('http://localhost:8000/api/pairs-by-level/', { 
+  //     competition: competitionId, 
+  //     tournament: tournamentId, 
+  //     level: level 
+  //   })
+  //     .then(response => {
+  //       setPairs(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.error('There was an error fetching pairs by level!', error);
+  //     });
+  // };
   const handleSubmit = (event) => {
     event.preventDefault();
     axios.post('http://localhost:8000/api/pairs-by-level/', { 
-      competition: competitionId, 
-      tournament: tournamentId, 
+      competition_id: competitionId, 
+      tournament_id: tournamentId, 
       level: level 
     })
       .then(response => {
@@ -40,7 +54,7 @@ function PairsByLevel() {
       .catch(error => {
         console.error('There was an error fetching pairs by level!', error);
       });
-  };
+};
 
   return (
     <div className="container mt-4">
@@ -78,13 +92,27 @@ function PairsByLevel() {
               <li key={pair.id} className="list-group-item">
                 {pair.participant1 && pair.participant2 ? (
                   <>
-                    <p><strong>{pair.participant1.name} ({pair.participant1_weight} kg)</strong> vs <strong>{pair.participant2.name} ({pair.participant2_weight} kg)</strong></p>
+                    <p><strong>{pair.participant1_name} ({pair.participant1_weight} kg)</strong> vs <strong>{pair.participant2_name} ({pair.participant2_weight} kg)</strong></p>
                     <p>Level: {pair.level}</p>
-                    <p>Competition: {pair.competition && pair.competition.name}</p>
-                    <p>Tournament: {pair.tournament && `${pair.tournament.gender === 1 ? 'Male' : 'Female'} ${pair.tournament.min_age}-${pair.tournament.max_age} years ${pair.tournament.min_weight}-${pair.tournament.max_weight} kg`}</p>
+                    <p>Competition: {pair.competition}</p>
+                    <p>Tournament: {pair.tournament}</p>
+                    {pair.winner ? (
+                      pair.winner === pair.participant1 ? (
+                        <p>Winner: {pair.participant1_name}</p>
+                      ) : (
+                        <p>Winner: {pair.participant2_name}</p>
+                      )
+                    ) : (
+                      <p>Winner: Undefined</p>
+                    )}
                   </>
                 ) : (
-                  <p>Incomplete pair information.</p>
+                  <>
+                  <p><strong>{pair.participant1_name} ({pair.participant1_weight} kg)</strong></p>
+                  <p>Level: {pair.level}</p>
+                  <p>Competition: {pair.competition}</p>
+                  <p>Tournament: {pair.tournament}</p>
+                </>
                 )}
               </li>
             ))}
