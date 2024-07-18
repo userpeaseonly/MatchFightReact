@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 function UpdateWinner() {
   const [pairId, setPairId] = useState('');
   const [winnerId, setWinnerId] = useState('');
   const [pairs, setPairs] = useState([]);
   const [participants, setParticipants] = useState([]);
-  const navigate = useNavigate();
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/pairs/')
@@ -23,8 +22,11 @@ function UpdateWinner() {
     const pairId = event.target.value;
     setPairId(pairId);
     const selectedPair = pairs.find(pair => pair.id === parseInt(pairId));
-    if (selectedPair && selectedPair.participant1 && selectedPair.participant2) {
-      setParticipants([selectedPair.participant1, selectedPair.participant2]);
+    if (selectedPair) {
+      const participantsArray = [];
+      if (selectedPair.participant1) participantsArray.push({ id: selectedPair.participant1.id, name: selectedPair.participant1.name });
+      if (selectedPair.participant2) participantsArray.push({ id: selectedPair.participant2.id, name: selectedPair.participant2.name });
+      setParticipants(participantsArray);
     } else {
       setParticipants([]);
     }
@@ -37,9 +39,11 @@ function UpdateWinner() {
       winner_id: winnerId 
     })
       .then(() => {
-        navigate('/pairs');
+        setMessage('Winner updated successfully!');
+        setTimeout(() => setMessage(''), 3000);  // Clear the message after 3 seconds
       })
       .catch(error => {
+        setMessage('There was an error updating the winner!');
         console.error('There was an error updating the winner!', error);
       });
   };
@@ -47,6 +51,7 @@ function UpdateWinner() {
   return (
     <div className="container mt-4">
       <h1>Update Winner</h1>
+      {message && <div className="alert alert-info">{message}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Pair:</label>
@@ -54,7 +59,8 @@ function UpdateWinner() {
             <option value="">Select Pair</option>
             {pairs.map(pair => (
               <option key={pair.id} value={pair.id}>
-                {pair.participant1 && pair.participant2 ? `${pair.participant1.name} vs ${pair.participant2.name}` : 'Incomplete pair information'}
+                {pair.participant1 && pair.participant2 ? `${pair.participant1.name} vs ${pair.participant2.name} - level ${pair.level}` : 'Incomplete pair information'}
+                {pair.winner === pair.participant1.id ? ` - Winner: ${pair.participant1.name}` : pair.winner === pair.participant2.id ? ` - Winner: ${pair.participant2.name}` : ' - Winner: None'}
               </option>
             ))}
           </select>

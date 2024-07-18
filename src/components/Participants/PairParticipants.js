@@ -85,15 +85,15 @@ function PairParticipants() {
           <ul className="list-group">
             {pairs.map(pair => (
               <li key={pair.id} className="list-group-item">
-                <p><strong>{pair.participant1_name} ({pair.participant1_weight} kg)</strong> vs <strong>{pair.participant2_name ? `${pair.participant2_name} (${pair.participant2_weight} kg)` : 'No opponent'}</strong></p>
+                <p><strong>{pair.participant1.name} ({pair.participant1.weight} kg)</strong> vs <strong>{pair.participant2 ? `${pair.participant2.name} (${pair.participant2.weight} kg)` : 'No opponent'}</strong></p>
                 <p>Level: {pair.level}</p>
-                <p>Competition: {pair.competition}</p>
-                <p>Tournament: {`${pair.tournament}`}</p>
+                <p>Competition: {pair.competition.name}</p>
+                <p>Tournament: {`${pair.tournament.gender === 1 ? 'Male' : 'Female'} ${pair.tournament.min_age}-${pair.tournament.max_age} years ${pair.tournament.min_weight}-${pair.tournament.max_weight} kg`}</p>
                 {pair.winner ? (
-                  pair.winner === pair.participant1 ? (
-                    <p>Winner: {pair.participant1_name}</p>
+                  pair.winner.id === pair.participant1.id ? (
+                    <p>Winner: {pair.participant1.name}</p>
                   ) : (
-                    <p>Winner: {pair.participant2_name}</p>
+                    <p>Winner: {pair.participant2.name}</p>
                   )
                 ) : (
                   <p>Winner: Undefined</p>

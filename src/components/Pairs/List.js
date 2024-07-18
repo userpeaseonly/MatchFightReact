@@ -22,7 +22,7 @@ function PairsList() {
           <li key={pair.id} className="list-group-item">
             {pair.participant1 && pair.participant2 ? (
               <>
-                <p><strong>{pair.participant1.name} ({pair.participant1_weight} kg)</strong> vs <strong>{pair.participant2.name} ({pair.participant2_weight} kg)</strong></p>
+                <p><strong>{pair.participant1.name} ({pair.participant1.weight} kg)</strong> vs <strong>{pair.participant2.name} ({pair.participant2.weight} kg)</strong></p>
                 <p>Level: {pair.level}</p>
                 <p>Competition: {pair.competition && pair.competition.name}</p>
                 <p>Tournament: {pair.tournament && `${pair.tournament.gender === 1 ? 'Male' : 'Female'} ${pair.tournament.min_age}-${pair.tournament.max_age} years ${pair.tournament.min_weight}-${pair.tournament.max_weight} kg`}</p>

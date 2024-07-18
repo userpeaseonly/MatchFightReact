@@ -22,7 +22,7 @@ function TournamentsList() {
       <ul className="list-group">
         {tournaments.map(tournament => (
           <li key={tournament.id} className="list-group-item">
-            <Link to={`/tournaments/${tournament.id}`}>{`${tournament.gender === 1 ? 'Male' : 'Female'} ${tournament.min_age}-${tournament.max_age} years ${tournament.min_weight}-${tournament.max_weight} kg`}</Link>
+            <Link to={`/tournaments/${tournament.id}`}>{tournament.id} | {`${tournament.gender === 1 ? 'Male' : 'Female'} ${tournament.min_age}-${tournament.max_age} years ${tournament.min_weight}-${tournament.max_weight} kg`}</Link>
           </li>
         ))}
       </ul>
