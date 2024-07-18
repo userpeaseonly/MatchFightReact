@@ -122,7 +122,7 @@ function FinalsPairForm() {
         {participant1Id && (
           <div className="mb-3">
             <label className="form-label">Winner:</label>
-            <select className="form-select" value={winnerId} onChange={(e) => setWinnerId(e.target.value)} required>
+            <select className="form-select" value={winnerId} onChange={(e) => setWinnerId(e.target.value)}>
               <option value="">Select Winner</option>
               <option value={participant1Id}>{getParticipantName(participant1Id)}</option>
               {participant2Id && <option value={participant2Id}>{getParticipantName(participant2Id)}</option>}

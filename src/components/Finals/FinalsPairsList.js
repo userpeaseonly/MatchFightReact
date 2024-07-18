@@ -52,7 +52,7 @@ function FinalsPairsList() {
         {finalsPairs.map(pair => (
           <li key={pair.id} className="list-group-item">
             <Link to={`/finals-pairs/${pair.id}`}>
-              {pair.participant1.participant.name} vs {pair.participant2.participant.name} - Stage: {pair.stage}
+              {pair.participant1.participant.name} vs {pair.participant2 ? pair.participant2.participant.name : 'No Opponent'} - Stage: {pair.stage}
             </Link>
           </li>
         ))}

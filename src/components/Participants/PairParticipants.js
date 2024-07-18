@@ -92,8 +92,10 @@ function PairParticipants() {
                 {pair.winner ? (
                   pair.winner.id === pair.participant1.id ? (
                     <p>Winner: {pair.participant1.name}</p>
-                  ) : (
+                  ) : pair.participant2 ? (
                     <p>Winner: {pair.participant2.name}</p>
+                  ) : (
+                    <p>Winner: Undefined</p>
                   )
                 ) : (
                   <p>Winner: Undefined</p>
